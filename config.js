@@ -14,14 +14,16 @@ const SONDER_CONFIG = {
   // gid (tab ID) for each tab in the sheet. Find these by clicking each
   // tab and reading the number after "gid=" in the browser URL bar.
   TABS: {
-    MENU: "842234015",             // "Menu" tab gid
-    DELIVERY: "1304291958", // "DeliveryZones" tab gid
-    SLOTS: "36268616",    // "TimeSlots" tab gid
+    MENU: "842234015",             // "Menu" tab gid, this one is required
+    SLOTS: "36268616",    // "TimeSlots" tab gid, this one is required
+    // DeliveryZones is no longer used by the site (delivery is now
+    // charged on actuals, paid to the delivery partner directly).
+    // You can leave that tab in your sheet or delete it, either is fine.
   },
 
   // Your Apps Script Web App URL (from Deploy > New deployment).
   // Ends in /exec
-  ORDERS_ENDPOINT: "https://script.google.com/macros/s/AKfycbxx6NqzlAR5BQGFRqIKvWBnphGZUY-Fb9ErRZ0ZmAsKBMqWd_q2Jl0fV879Zjdq-G9A/exec",
+  ORDERS_ENDPOINT: "https://script.google.com/macros/s/AKfycbxlnmnRY17LGBL-UC4PpIKnYuqWwOce0_S7EuiEtZLLSTFtrwtiHmxGiT2K5ssMEmSL3Q/exec",
 
   // Razorpay Key ID (public, safe to expose in front-end code).
   // Use the "rzp_test_..." key while testing, switch to "rzp_live_..." when ready.
@@ -29,8 +31,8 @@ const SONDER_CONFIG = {
 
   // Shown on receipts / checkout
   BUSINESS_NAME: "Sonder",
-  BUSINESS_EMAIL: "hello@sonder.co.in",
-  BUSINESS_PHONE: "+91-XXXXXXXXXX",
+  BUSINESS_EMAIL: "jason@sonder.co.in",
+  BUSINESS_PHONE: "+91-9538680557",
 };
 
 // ---- internal helper: builds a CSV export URL for a given tab ----

@@ -24,29 +24,31 @@
   <div class="wrap center" style="max-width:560px;">
     <span class="hero-eyebrow">Order confirmed</span>
     <h1>Thank you.</h1>
-    <div class="hero-rule"></div>
+    <div class="hero-rule"><span></span><span class="gold"></span><span></span></div>
     <p class="muted" id="msg" style="font-size:1rem;">Your order has been placed.</p>
     <div style="text-align:left; margin-top:36px; border:1px solid var(--beige-line); padding:28px;">
       <div class="summary-row"><span>Order ID</span><span id="ord"></span></div>
-      <div class="summary-row"><span>Dish</span><span id="dish"></span></div>
+      <div class="summary-row"><span>Items</span><span id="dish"></span></div>
       <div class="summary-row"><span>Total paid</span><span id="total"></span></div>
+      <div class="summary-row"><span>Delivery date</span><span id="date"></span></div>
       <div class="summary-row" style="border-bottom:none;"><span>Delivery slot</span><span id="slot"></span></div>
     </div>
-    <p class="muted mt-lg">A receipt has been emailed to you. We'll reach out on your contact number if anything needs confirming.</p>
+    <p class="muted mt-lg">A receipt has been emailed to you. Delivery is charged on actuals and paid directly to the delivery partner. We'll reach out on your contact number if anything needs confirming.</p>
     <a href="index.html" class="btn btn-primary mt-lg">Back to home</a>
   </div>
 </section>
 
 <footer class="site-footer">
-  <div class="wrap footer-row"><span>&copy; <span id="year"></span> Sonder, Cox Town, Bangalore</span></div>
+  <div class="wrap footer-row"><span>&copy; <span id="year"></span> Sonder, Bangalore</span></div>
 </footer>
 
 <script>
   document.getElementById("year").textContent = new Date().getFullYear();
   const p = new URLSearchParams(window.location.search);
   document.getElementById("ord").textContent = p.get("order") || "n/a";
-  document.getElementById("dish").textContent = p.get("dish") || "n/a";
+  document.getElementById("dish").textContent = p.get("items") || "n/a";
   document.getElementById("total").textContent = p.get("total") ? `₹${p.get("total")}` : "n/a";
+  document.getElementById("date").textContent = p.get("date") || "n/a";
   document.getElementById("slot").textContent = p.get("slot") || "n/a";
   if (p.get("email")) {
     document.getElementById("msg").textContent = `Your order has been placed and a receipt is on its way to ${p.get("email")}.`;

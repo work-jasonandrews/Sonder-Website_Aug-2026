@@ -19,6 +19,9 @@
     <nav class="main-nav">
       <a href="index.html" aria-current="page">Home</a>
       <a href="about.html">About Us</a>
+      <a href="checkout.html" style="display:inline-flex; align-items:center; gap:6px;">
+        Cart <span id="cart-count" class="cart-badge" style="display:none;">0</span>
+      </a>
     </nav>
   </div>
 </header>
@@ -54,12 +57,12 @@
     <div class="card">
       <span class="eyebrow">Delivered anywhere</span>
       <h3>Across Bangalore</h3>
-      <p class="muted">Delivery isn't limited to Cox Town. Order from anywhere in the city, with the fee shown before you pay.</p>
+      <p class="muted">Delivery is charged on actuals and paid directly to the delivery partner.</p>
     </div>
     <div class="card">
       <span class="eyebrow">Simple ordering</span>
       <h3>Done in minutes</h3>
-      <p class="muted">Pick your time slot, add any notes, and pay securely online. That's it.</p>
+      <p class="muted">Add what you'd like to your cart, pick a time slot, and pay securely online.</p>
     </div>
   </div>
 </section>
@@ -75,6 +78,7 @@
 
 <script src="js/config.js"></script>
 <script src="js/sheet-data.js"></script>
+<script src="js/cart.js"></script>
 <script>
 document.getElementById("year").textContent = new Date().getFullYear();
 const toggle = document.querySelector(".nav-toggle");
@@ -83,13 +87,19 @@ toggle.addEventListener("click", () => {
   const open = nav.classList.toggle("open");
   toggle.setAttribute("aria-expanded", open);
 });
+updateCartBadge();
 
-function dishCardHtml(d) {
+function dishCardHtml(d, idx) {
   const badge = stockBadge(d.stock);
   const soldOut = badge.cls === "badge-soldout";
   const img = d.imageUrl
     ? `<img src="${d.imageUrl}" alt="${d.dish}">`
     : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--green);">No photo yet</div>`;
+  const maxQty = d.stock === null ? 8 : Math.max(Math.min(d.stock, 8), 0);
+  const qtyOptions = Array.from({ length: maxQty || 1 }, (_, i) => i + 1)
+    .map((n) => `<option value="${n}">${n}</option>`)
+    .join("");
+
   return `
     <div class="dish-card">
       <div class="dish-photo">${img}</div>
@@ -101,12 +111,24 @@ function dishCardHtml(d) {
         <div class="dish-meta">
           <span>${d.portions || "1 portion"}</span>
         </div>
-        <a href="checkout.html?dish=${encodeURIComponent(d.dish)}&price=${d.price}"
-           class="${soldOut ? "btn btn-outline" : "btn-solid"}" ${soldOut ? 'aria-disabled="true" onclick="return false;"' : ""}>
-          ${soldOut ? "Sold out for today" : "Order this"}
-        </a>
+        ${soldOut
+          ? `<span class="btn btn-outline" aria-disabled="true">Sold out for today</span>`
+          : `<div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+               <select id="qty-${idx}" style="width:70px;">${qtyOptions}</select>
+               <button type="button" class="btn-solid" onclick="handleAddToCart(${idx}, '${d.dish.replace(/'/g, "\\'")}', ${d.price})">Add to cart</button>
+             </div>`
+        }
       </div>
     </div>`;
+}
+
+function handleAddToCart(idx, dish, price) {
+  const qty = Number(document.getElementById(`qty-${idx}`).value) || 1;
+  addToCart(dish, price, qty);
+  const btn = event.target;
+  const original = btn.textContent;
+  btn.textContent = "Added ✓";
+  setTimeout(() => { btn.textContent = original; }, 1200);
 }
 
 (async function loadMenu() {
@@ -121,7 +143,7 @@ function dishCardHtml(d) {
       empty.classList.remove("hidden");
       return;
     }
-    container.innerHTML = dishes.map(dishCardHtml).join('<div style="height:56px; border-top:1px solid var(--beige-line); margin-bottom:56px;"></div>');
+    container.innerHTML = dishes.map((d, i) => dishCardHtml(d, i)).join('<div style="height:56px; border-top:1px solid var(--beige-line); margin-bottom:56px;"></div>');
     container.classList.remove("hidden");
   } catch (e) {
     loading.classList.add("hidden");
