@@ -52,9 +52,9 @@ function renderCart() {
         <div style="display:flex; align-items:center; gap:14px;">
           <select onchange="handleQtyChange(${i}, this.value)" style="width:64px;">
   ${Array.from(
-    { length: Math.max(menuStock[item.dish] || 1, item.qty) },
-    (_, n) => n + 1
-  )
+  { length: Math.max(menuStock[item.dish] || 1, 1) },
+  (_, n) => n + 1
+)
     .map(
       (n) =>
         `<option value="${n}" ${n === item.qty ? "selected" : ""}>${n}</option>`
