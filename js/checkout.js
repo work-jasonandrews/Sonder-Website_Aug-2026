@@ -12,7 +12,24 @@ const els = {
   slot: document.getElementById("slot"),
   date: document.getElementById("date"),
   payBtn: document.getElementById("pay-btn"),
-};
+   
+   let menuStock = {};
+
+async function loadMenuStock() {
+  try {
+    const dishes = await getMenu();
+
+    menuStock = {};
+
+    dishes.forEach((dish) => {
+      menuStock[dish.dish] = dish.stock;
+    });
+  } catch (e) {
+    console.warn("Could not load menu stock:", e);
+    menuStock = {};
+  }
+}
+
 
 function renderCart() {
   const cart = getCart();
@@ -34,10 +51,16 @@ function renderCart() {
         </div>
         <div style="display:flex; align-items:center; gap:14px;">
           <select onchange="handleQtyChange(${i}, this.value)" style="width:64px;">
-            ${Array.from({ length: 10 }, (_, n) => n + 1)
-              .map((n) => `<option value="${n}" ${n === item.qty ? "selected" : ""}>${n}</option>`)
-              .join("")}
-          </select>
+  ${Array.from(
+    { length: Math.max(menuStock[item.dish] || 1, item.qty) },
+    (_, n) => n + 1
+  )
+    .map(
+      (n) =>
+        `<option value="${n}" ${n === item.qty ? "selected" : ""}>${n}</option>`
+    )
+    .join("")}
+</select>
           <span style="min-width:56px; text-align:right;">₹${item.price * item.qty}</span>
           <button type="button" onclick="handleRemove(${i})" style="background:none; border:none; color:#8a3b3b; cursor:pointer; font-size:0.85rem;">Remove</button>
         </div>
@@ -167,6 +190,9 @@ function openRazorpay(order) {
   rzp.open();
 }
 
-renderCart();
-loadSlots();
-loadDates();
+(async function initCheckout() {
+  await loadMenuStock();
+  renderCart();
+  loadSlots();
+  loadDates();
+})();
