@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Order | Sonder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@400;500&family=Bodoni+Moda:wght@600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css" />
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="index.html" class="logo"><img src="img/sonder-logo.png" alt="Sonder"></a>
+    <button class="nav-toggle" aria-label="Menu" aria-expanded="false">&#9776;</button>
+    <nav class="main-nav">
+      <a href="index.html">Home</a>
+      <a href="about.html">About Us</a>
+      <a href="checkout.html" aria-current="page">Cart</a>
+    </nav>
+  </div>
+</header>
+
+<section style="padding-top:44px;">
+  <div class="wrap">
+    <span class="eyebrow">Your order</span>
+    <h1 style="margin-top:6px;">Cart & checkout</h1>
+
+    <div id="load-error" class="notice notice-error hidden" style="margin-top:16px;"></div>
+    <div id="empty-cart" class="notice hidden" style="margin-top:24px; border-color:var(--beige-line);">
+      Your cart is empty. <a href="index.html" style="color:var(--green); border-bottom:1px solid var(--gold);">Head back to today's menu</a> to add something.
+    </div>
+
+    <form id="order-form" class="checkout-layout mt-lg hidden">
+      <div>
+        <div class="card" style="border-top:none; padding-top:0;">
+          <h3>Items</h3>
+          <div id="cart-items"></div>
+        </div>
+
+        <div class="card">
+          <h3>Your details</h3>
+          <div class="form-grid">
+            <div><label for="name">Full name</label><input id="name" required /></div>
+            <div><label for="contact">Contact number</label><input id="contact" type="tel" required /></div>
+            <div><label for="email">Email (for receipt)</label><input id="email" type="email" required /></div>
+            <div><label for="altcontact">Alternative contact (optional)</label><input id="altcontact" type="tel" /></div>
+            <div class="full"><label for="address">Delivery address</label><textarea id="address" required></textarea></div>
+            <div class="full"><label for="landmark">Landmark</label><input id="landmark" /></div>
+            <div><label for="date">Delivery date</label>
+              <select id="date" required><option value="">Loading dates…</option></select>
+            </div>
+            <div><label for="slot">Preferred time slot</label>
+              <select id="slot" required><option value="">Loading slots…</option></select>
+            </div>
+            <div class="full"><label for="instructions">Special instructions (optional)</label>
+              <textarea id="instructions" placeholder="Less spicy, call before arriving, etc."></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="order-summary">
+        <h3>Order summary</h3>
+        <div id="summary-rows"></div>
+        <div class="summary-row total"><span>Total</span><span id="sum-total">₹0</span></div>
+        <p class="muted" style="font-size:0.85rem; margin-top:10px;">
+          Delivery is charged on actuals and paid directly to the delivery partner on arrival, it isn't included in the amount paid here.
+        </p>
+        <button type="submit" id="pay-btn" class="btn-solid" style="width:100%; margin-top:16px;">
+          Pay & place order
+        </button>
+        <p class="muted" style="font-size:0.8rem; margin-top:10px;">Secure payment via Razorpay. You'll get an email receipt right after.</p>
+      </aside>
+    </form>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <span>&copy; <span id="year"></span> Sonder, Bangalore</span>
+    <nav style="display:flex; gap:20px;"><a href="about.html">About</a></nav>
+  </div>
+</footer>
+
+<script src="js/config.js"></script>
+<script src="js/sheet-data.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/checkout.js"></script>
+<script>
+  document.getElementById("year").textContent = new Date().getFullYear();
+  const toggle = document.querySelector(".nav-toggle");
+  const nav = document.querySelector(".main-nav");
+  toggle.addEventListener("click", () => {
+    const open = nav.classList.toggle("open");
+    toggle.setAttribute("aria-expanded", open);
+  });
+</script>
+</body>
+</html>
