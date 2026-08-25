@@ -59,8 +59,33 @@ function cartTotal() {
 
 function updateCartBadge() {
   const el = document.getElementById("cart-count");
-  if (!el) return;
+
+  if (el) {
+    const count = cartCount();
+    el.textContent = count;
+    el.style.display = count > 0 ? "inline-flex" : "none";
+  }
+
+  updateMobileCartBar();
+}
+
+function updateMobileCartBar() {
+  const bar = document.getElementById("mobile-cart-bar");
+  const countEl = document.getElementById("mobile-cart-count");
+  const totalEl = document.getElementById("mobile-cart-total");
+
+  if (!bar || !countEl || !totalEl) return;
+
   const count = cartCount();
-  el.textContent = count;
-  el.style.display = count > 0 ? "inline-flex" : "none";
+  const total = cartTotal();
+
+  if (count > 0) {
+    countEl.textContent = `${count} ${count === 1 ? "item" : "items"}`;
+    totalEl.textContent = `₹${total}`;
+    bar.classList.add("visible");
+    bar.setAttribute("aria-hidden", "false");
+  } else {
+    bar.classList.remove("visible");
+    bar.setAttribute("aria-hidden", "true");
+  }
 }
