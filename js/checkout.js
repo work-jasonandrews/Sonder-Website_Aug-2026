@@ -34,7 +34,7 @@ function renderCart() {
         </div>
         <div style="display:flex; align-items:center; gap:14px;">
           <select onchange="handleQtyChange(${i}, this.value)" style="width:64px;">
-            ${Array.from({ length: 8 }, (_, n) => n + 1)
+            ${Array.from({ length: 10 }, (_, n) => n + 1)
               .map((n) => `<option value="${n}" ${n === item.qty ? "selected" : ""}>${n}</option>`)
               .join("")}
           </select>
