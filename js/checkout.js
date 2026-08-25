@@ -24,6 +24,23 @@ async function loadMenuStock() {
     dishes.forEach((dish) => {
       menuStock[dish.dish] = dish.stock;
     });
+
+     const cart = getCart();
+let changed = false;
+
+cart.forEach((item) => {
+  const stock = menuStock[item.dish];
+
+  if (Number.isFinite(stock) && stock >= 0 && item.qty > stock) {
+    item.qty = stock;
+    changed = true;
+  }
+});
+
+if (changed) {
+  saveCart(cart);
+}
+     
   } catch (e) {
     console.warn("Could not load menu stock:", e);
     menuStock = {};
